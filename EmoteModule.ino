@@ -109,11 +109,11 @@ struct StaticEmote {
   }
 
   void drawImage() {
-  for(uint8_t i; i< NUMPIXELS; i++){
+  for(int i; i< NUMPIXELS; i++){
     strip.setPixelColor(i, getColorAtIndex(i));
   }
   strip.show();
-  delay(80);
+  delay(150);
   }
 };
 
@@ -228,13 +228,7 @@ void handleButtonPress(){
 IsText = 0;
 }
 
-
-void renderImage(){
-  switch(emote){
-  case 0:{ //The "standard" Pride Flag design
-      const uint8_t numColors = 7;
-      const uint32_t colorPallete[numColors] = {COLOR_OFF, COLOR_RED, COLOR_ORANGE, COLOR_YELLOW, COLOR_GREEN, COLOR_BLUE, COLOR_PURPLE};
-      const uint8_t pixelColorIndexes[64] =  {0, 0, 0, 0, 0, 0, 0, 0,
+      const uint8_t PROGMEM prideFlag[64] =  {0, 0, 0, 0, 0, 0, 0, 0,
                                               1, 1, 1, 1, 1, 1, 1, 1,
                                               2, 2, 2, 2, 2, 2, 2, 2,
                                               3, 3, 3, 3, 3, 3, 3, 3,
@@ -243,6 +237,13 @@ void renderImage(){
                                               6, 6, 6, 6, 6, 6, 6, 6,
                                               0, 0, 0, 0, 0, 0, 0, 0,
                                               };
+
+void renderImage(){
+  switch(emote){
+  case 0:{ //The "standard" Pride Flag design
+      const uint8_t numColors = 7;
+      const uint32_t colorPallete[numColors] = {COLOR_OFF, COLOR_RED, COLOR_ORANGE, COLOR_YELLOW, COLOR_GREEN, COLOR_BLUE, COLOR_PURPLE};
+      const uint8_t pixelColorIndexes = (pgm_read_byte(&prideFlag));
       StaticEmote thisEmote = StaticEmote(numColors, colorPallete, pixelColorIndexes);
       thisEmote.drawImage();
   }
