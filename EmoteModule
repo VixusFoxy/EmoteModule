@@ -1763,12 +1763,10 @@ for(int y=0; y<TextHandleSize; y) {
 else;
 
 // EMOTE SWITCH BUTTON - EDIT (emote > n) WHERE n IS NUMBER OF EMOTES.
-
-  thisState = digitalRead(2);
+    thisState = digitalRead(2);
     if(thisState == LOW)       
     {
-      emote++;
-      if (emote > 41) emote = 0;
+      unsigned int buttonHeldTime = millis();
       EEPROM.write(1,emote); 
       for(int i=0; i<sizeof(Blank); i) {                     
           strip.setPixelColor(i, 0);
@@ -1776,9 +1774,18 @@ else;
       };
       strip.show();
       delay(150);  
-    }
-  while(true){
-    if (digitalRead(2) == HIGH) break;
+      
+      while(true){
+          if (digitalRead(2) == HIGH) break;
+      }
+       buttonHeldTime = millis() - buttonHeldTime;
+      if(buttonHeldTime < 1000){
+        emote++;
+        emote = emote % 49;
+      }
+      else{
+        emote = 0;
+      }
     }
 IsText = 0;
 }
