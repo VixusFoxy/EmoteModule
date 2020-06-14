@@ -42,6 +42,9 @@ char TextHandle[100];             // Increase past 100 if desired. Fills with te
 int TextHandleSize = 0;           // Count how many elements are in a string for text handling.
 boolean brokenloop = 0;           // On button press, break an animation loop
 
+uint32_t color = 0x000000;      // Initialising the color variable.
+boolean tested = 0;             // Have we tested the matrix? Displays a little "OK" if not, then sets to true.
+
 void setup() {
   pinMode(2, INPUT_PULLUP);       // Enable input on Pin D2 and use internal pullup
   emote = EEPROM.read(1);         // EEPROM on boot      
@@ -72,10 +75,10 @@ void setup() {
     }
   }
 // TESTING CODE
+if (tested == 0)          {initLights();};
 }
 
-uint32_t color = 0x000000;      // Initialising the color variable.
-boolean tested = 0;             // Have we tested the matrix? Displays a little "OK" if not, then sets to true.
+
 
 // NOTE: Due to some programming weirdness the matricies are MIRRORED HORIZONTALLY from how they appear in the matrix below.
 
@@ -243,11 +246,6 @@ void handleButtonPress(){
 IsText = 0;
 }
 
-
-
-void renderImage(){
-  switch(emote){
-  case 0:{ //The "standard" Pride Flag design
       const uint8_t numColors = 7;
       const uint32_t colorPallete[7] = {COLOR_OFF, COLOR_RED, COLOR_ORANGE, COLOR_YELLOW, COLOR_GREEN, COLOR_BLUE, COLOR_PURPLE};
       const uint8_t prideFlag[64] =          {0, 0, 0, 0, 0, 0, 0, 0,
@@ -259,6 +257,10 @@ void renderImage(){
                                               6, 6, 6, 6, 6, 6, 6, 6,
                                               0, 0, 0, 0, 0, 0, 0, 0,
                                               };
+
+void renderImage(){
+  switch(emote){
+  case 0:{ //The "standard" Pride Flag design
       drawThings(numColors, colorPallete, prideFlag);
   }
     break;
@@ -270,7 +272,6 @@ void renderImage(){
 
 
 void loop() {
-if (tested == 0)          {initLights();};
 if(digitalRead(2) == LOW) {handleButtonPress();};  
 if(needsUpdateImage)      {renderImage();};
 delay(20);
